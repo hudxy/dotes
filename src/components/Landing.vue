@@ -3,7 +3,7 @@
         <h1>{{msg}}</h1>
         <form action="/api/steam_submission" method="post" >
             <input type="text" placeholder="Your Steam ID, scrub..." name="steamid"> 
-            <input type="submit" value="Submit" name="submitbutton">
+            <input type="submit" value="Submit">
         </form>
     </div>
 </template>
