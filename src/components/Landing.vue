@@ -1,7 +1,10 @@
 <template>
     <div class="landing">
         <h1>{{msg}}</h1>
-        <input type="text" placeholder="Your Steam ID, scrub...">
+        <form action="/api/steam_submission" method="post" >
+            <input type="text" placeholder="Your Steam ID, scrub..." name="steamid"> 
+            <input type="submit" value="Submit" name="submitbutton">
+        </form>
     </div>
 </template>
 
