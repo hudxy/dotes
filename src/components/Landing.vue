@@ -17,6 +17,6 @@ export default {
 
 <style scoped>
 .landing, input, select, textarea{
-    color: white;
+    color: red;
 }
 </style>
