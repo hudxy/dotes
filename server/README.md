@@ -1,2 +1,12 @@
-Run `npm run build` to create Vue prod app
-Run `node app.js` to start server on `localhost:3000`
+# How to run server
+
+Typescript should be installed via npm
+
+In the 'dotes' directory run: 
+`npm run build`
+A dist/ directory should be created in the 'dotes' directory
+in the myapp/ directory run:
+`tsc app.ts`
+A `app.js` should be produced.
+Finally run:
+`node app.js`
