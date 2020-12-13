@@ -5,6 +5,10 @@
             <input type="text" placeholder="Your Steam ID, scrub..." name="steamid"> 
             <input type="submit" value="Submit">
         </form>
+        <form action="/api/match" method="get" >
+            <input type="text" placeholder="Enter Match ID..." name="matchid"> 
+            <input type="submit" value="Submit">
+        </form>
     </div>
 </template>
 
