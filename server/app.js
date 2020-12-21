@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var axios_1 = require("axios");
 var dotaapi_1 = require("./modules/dotaapi");
 var express = require('express');
 var path = require('path');
@@ -55,24 +56,25 @@ app.post('/api/steam_submission', function (req, res) {
     var mydotaobject = DotaClient.getPlayers(acctid);
     res.send("sniped blitch");
 });
-app.get('/api/match', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var DotaClient, match, mydotaobject;
+app.get('/api/match', function (req, result) { return __awaiter(void 0, void 0, void 0, function () {
+    var DotaClient, match, return_data;
     return __generator(this, function (_a) {
         DotaClient = new dotaapi_1.DotaRestApi();
         console.log(req.query.matchid);
         match = req.query.matchid;
-        mydotaobject = DotaClient.getMatch(match).then(function (match_data) {
+        return_data = { "heroes": {}, "players": {} };
+        axios_1["default"].get("https://api.opendota.com/api/matches/" + match).then(function (res) {
             // log JSON data from Promise then display JSON data on browser
-            var return_data = { "hero": {}, "players": {} };
-            // console.log(match_data);
-            for (var _i = 0, _a = match_data['players']; _i < _a.length; _i++) {
+            var index = 0;
+            for (var _i = 0, _a = res.data['players']; _i < _a.length; _i++) {
                 var v = _a[_i];
-                return_data.hero = v['hero_id'];
-                return_data.players = v['personaname'];
-                console.log(return_data.hero);
-                console.log(return_data.players);
+                return_data.heroes[index] = v['hero_id'];
+                return_data.players[index] = v['personaname'];
+                index++;
             }
-            res.send(return_data);
+            console.log(return_data);
+            // console.log(res.data)
+            result.send(return_data);
         });
         return [2 /*return*/];
     });
