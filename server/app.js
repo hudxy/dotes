@@ -56,24 +56,21 @@ app.post('/api/steam_submission', function (req, res) {
     var mydotaobject = DotaClient.getPlayers(acctid);
     res.send("sniped blitch");
 });
-app.get('/api/match', function (req, result) { return __awaiter(void 0, void 0, void 0, function () {
-    var DotaClient, match, return_data;
+app.get('/api/match/:match_id', function (req, result) { return __awaiter(void 0, void 0, void 0, function () {
+    var match, return_data;
     return __generator(this, function (_a) {
-        DotaClient = new dotaapi_1.DotaRestApi();
-        console.log(req.query.matchid);
-        match = req.query.matchid;
+        match = req.params.match_id;
         return_data = { "heroes": {}, "players": {} };
         axios_1["default"].get("https://api.opendota.com/api/matches/" + match).then(function (res) {
-            // log JSON data from Promise then display JSON data on browser
+            // axios get request to the api endpoint for matches
             var index = 0;
+            // fetch the players and the hero id for the response
             for (var _i = 0, _a = res.data['players']; _i < _a.length; _i++) {
                 var v = _a[_i];
                 return_data.heroes[index] = v['hero_id'];
                 return_data.players[index] = v['personaname'];
                 index++;
             }
-            console.log(return_data);
-            // console.log(res.data)
             result.send(return_data);
         });
         return [2 /*return*/];
