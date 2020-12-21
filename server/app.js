@@ -46,7 +46,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(cors());
 app.get('/', function (req, res) {
-    console.log("Hi");
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 app.post('/api/steam_submission', function (req, res) {
@@ -64,8 +63,16 @@ app.get('/api/match', function (req, res) { return __awaiter(void 0, void 0, voi
         match = req.query.matchid;
         mydotaobject = DotaClient.getMatch(match).then(function (match_data) {
             // log JSON data from Promise then display JSON data on browser
-            console.log(match_data);
-            res.send(match_data);
+            var return_data = { "hero": {}, "players": {} };
+            // console.log(match_data);
+            for (var _i = 0, _a = match_data['players']; _i < _a.length; _i++) {
+                var v = _a[_i];
+                return_data.hero = v['hero_id'];
+                return_data.players = v['personaname'];
+                console.log(return_data.hero);
+                console.log(return_data.players);
+            }
+            res.send(return_data);
         });
         return [2 /*return*/];
     });

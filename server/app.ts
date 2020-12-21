@@ -29,11 +29,20 @@ app.get('/api/match', async (req, res) => {
   const DotaClient = new DotaRestApi();
   console.log(req.query.matchid);
   let match = req.query.matchid;
-  let mydotaobject = DotaClient.getMatch(match).then(function (match_data)
+  let mydotaobject = DotaClient.getMatch(match).then(function (match_data: object)
   {
     // log JSON data from Promise then display JSON data on browser
-    console.log(match_data);
-    res.send(match_data);
+    let return_data = {"hero" : {}, "players" : {}};
+    // console.log(match_data);
+    for (let v of match_data['players'])
+    {
+      return_data.hero = v['hero_id'];
+      return_data.players = v['personaname'];
+      console.log(return_data.hero)
+      console.log(  return_data.players)
+    }
+    
+    res.send(return_data);
   });
 });
 
