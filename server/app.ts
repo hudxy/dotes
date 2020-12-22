@@ -1,3 +1,4 @@
+import axios from "axios"
 import {DotaRestApi} from "./modules/dotaapi";
 const express = require('express');
 const path = require('path');
@@ -25,16 +26,23 @@ app.post('/api/steam_submission', (req, res) => {
     res.send("sniped blitch");
 });
 
-app.get('/api/match', async (req, res) => {
-  const DotaClient = new DotaRestApi();
-  console.log(req.query.matchid);
-  let match = req.query.matchid;
-  let mydotaobject = DotaClient.getMatch(match).then(function (match_data)
-  {
-    // log JSON data from Promise then display JSON data on browser
-    console.log(match_data);
-    res.send(match_data);
-  });
+app.get('/api/match/:match_id', async (req, result) => {
+  let match = req.params.match_id;
+  let return_data = {"heroes" : {}, "players" : {}};
+
+  axios.get("https://api.opendota.com/api/matches/" + match).then((res) => {
+    // axios get request to the api endpoint for matches
+    let index = 0;
+
+    // fetch the players and the hero id for the response
+    for (let v of res.data['players'])
+    {
+      return_data.heroes[index] = v['hero_id'];
+      return_data.players[index] = v['personaname'];
+      index++;
+    }
+    result.send(return_data);
+    });
 });
 
 app.listen(port, () => {

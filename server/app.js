@@ -36,6 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
+var axios_1 = require("axios");
 var dotaapi_1 = require("./modules/dotaapi");
 var express = require('express');
 var path = require('path');
@@ -46,7 +47,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../dist')));
 app.use(cors());
 app.get('/', function (req, res) {
-    console.log("Hi");
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 app.post('/api/steam_submission', function (req, res) {
@@ -56,16 +56,22 @@ app.post('/api/steam_submission', function (req, res) {
     var mydotaobject = DotaClient.getPlayers(acctid);
     res.send("sniped blitch");
 });
-app.get('/api/match', function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var DotaClient, match, mydotaobject;
+app.get('/api/match/:match_id', function (req, result) { return __awaiter(void 0, void 0, void 0, function () {
+    var match, return_data;
     return __generator(this, function (_a) {
-        DotaClient = new dotaapi_1.DotaRestApi();
-        console.log(req.query.matchid);
-        match = req.query.matchid;
-        mydotaobject = DotaClient.getMatch(match).then(function (match_data) {
-            // log JSON data from Promise then display JSON data on browser
-            console.log(match_data);
-            res.send(match_data);
+        match = req.params.match_id;
+        return_data = { "heroes": {}, "players": {} };
+        axios_1["default"].get("https://api.opendota.com/api/matches/" + match).then(function (res) {
+            // axios get request to the api endpoint for matches
+            var index = 0;
+            // fetch the players and the hero id for the response
+            for (var _i = 0, _a = res.data['players']; _i < _a.length; _i++) {
+                var v = _a[_i];
+                return_data.heroes[index] = v['hero_id'];
+                return_data.players[index] = v['personaname'];
+                index++;
+            }
+            result.send(return_data);
         });
         return [2 /*return*/];
     });
