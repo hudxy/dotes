@@ -8,11 +8,15 @@
         <input type="text" id="matchid" placeholder="Enter Match ID..." name="matchid">
         <button v-on:click="submitMatchInfo()">Get Match Info!</button>
     <div>{{match}}</div>
+    <div v-for="hero in heroes" v-bind:key="hero.hero_url">
+        <img v-bind:src="hero.hero_url" alt="">
+    </div>
     </div>
 </template>
 
 <script>
 import DotaService from '@/DotaService';
+const hero_info = require('@/assets/ref/heroes.json') 
 export default {
     name: 'Landing',
     props: {
@@ -20,7 +24,8 @@ export default {
     },
     data() {
         return {
-            match: {}
+            match: {},
+            heroes: []
         }
     },
     created() {
@@ -30,7 +35,16 @@ export default {
         async getMatch(match_id) {
            DotaService.getMatch(match_id).then(match => {
                this.$set(this, "match", match);
-           }).bind(this)
+               for (let x in match.heroes) {
+                   for (let i in hero_info.heroes)
+                   {
+                       if (match.heroes[x] === hero_info.heroes[i].id) 
+                       {
+                        this.heroes.push({hero_url: hero_info.heroes[i].url_large_portrait});
+                       }
+                   } 
+               }
+           })
         },
         submitMatchInfo() {
             let match_id = document.getElementById('matchid').value;
@@ -49,7 +63,7 @@ export default {
             }
             console.log(match_id)
             this.getMatch(match_id);
-        }
+        },
     }
 }
 </script>
